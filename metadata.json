@@ -1,0 +1,14 @@
+{
+  "name": "svange-tacacsplus",
+  "version": "0.1.0",
+  "author": "Samuel Vange",
+  "summary": "A module to install and configure TACACS+. This module is created to be compatible with the NSA's System Integrity Management Platform (SIMP).",
+  "license": "Apache 2.0",
+  "source": "git@github.com:svange/svange-tacacsplus.git",
+  "project_page": "N/A",
+  "issues_url": "N/A",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ]
+}
+
