@@ -1,0 +1,33 @@
+# This file managed by Puppet, any configurations made here will be clobbered upon the next Puppet run
+#
+# === Authors
+#
+# Samuel Vange
+
+# tacacs key
+key = <%= @tacacs_key %>
+
+
+# user details
+# admin freelinuxtutorials@gmail.com
+user = <%= @tacacs_login_user %>  {
+  default service = permit
+  member = <%= @tacacs_admin_group %>
+  login = <%= @tacacs_login_user_password %>
+}
+
+# group details
+# admin group
+group = <%= @tacacs_admin_group %>  {
+  default service = permit
+  service = exec {
+    priv-lvl = 15
+  }
+}
+
+# Enable password setup for users:
+user = $enable$ {
+  login = <%= @tacacs_enable_password %>
+}
+
+accounting file = /var/log/tacacs/tac_plus.log
