@@ -15,17 +15,17 @@
 
 ## Overview
 
-This module installs and configures the tacacs+ package.
+This module installs and configures TACACS+.
 
 ## Module Description
 
-If applicable, this section should have a brief description of the technology
-the module integrates with and what that integration enables. This section
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?"
+TACACS+ (Terminal Access Controller Access-Control System, usually 
+pronounced like tack-axe) is a CISCO developed authentication, authorization and
+accounting (AAA) system for tracking user activities on an IP-based network and 
+controlling their access to network resources. 
 
-If your module has a range of functionality (installation, configuration,
-management, etc.) this is the time to mention it.
+TACACS+ gives administrators the ability to centrally manage users, groups, and
+passwords for network appliance.
 
 ## Setup
 
@@ -36,42 +36,97 @@ management, etc.) this is the time to mention it.
 * This is a great place to stick any warnings.
 * Can be in list or paragraph form.
 
-### Setup Requirements **OPTIONAL**
+### Setup Requirements
 
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
+Your system must have a tacacsplus package available to it. As this package is 
+not available as an RPM, files/tacacsplus-1.0-1.el7.x86_64 is provided.
 
 ### Beginning with tacacsplus
 
-The very basic steps needed for a user to get the module up and running.
+#### In Hiera:
+````
+tacacsplus::key :                   'tackey'
+tacacsplus::login_user :            'user'
+tacacsplus::login_user_password :   'mypassword'
+tacacsplus::enable_password :       'myenablepassword'
+tacacsplus::encoding :              'des'
 
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you may wish to include an additional section here: Upgrading
-(For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
+classes:
+  - 'tacacsplus'
+````
 
 ## Usage
 
-Put the classes, types, and resources for customizing, configuring, and doing
-the fancy stuff with your module here.
+##### `encoding`
+
+Default: `cleartext`. Specifies the encoding used for placing passwords into the 
+configuration file. Options are 'file', 'cleartext', 'nopassword', or 'des'.
+
+##### `key`
+
+Default: `tackey`. Specifies the symetric key used for communication with 
+clients.
+
+##### `login_user`
+
+Default: `admin`. Specifies the username that clients can authenticate against.
+
+##### `login_user_password`
+
+Default: `password`. Specifies the password of the login_user.
+
+##### `simp`
+
+Default: `false`. If set, uses the defined types made available by SIMP to set
+IP tables rules. For information on SIMP please see <https://simp-project.com/> 
+for more information.
+
+##### `package_name`
+
+Default: `tacacsplus`. The name of the package used to install TACACS+.
+
+##### `admin_group`
+
+Default: `admingroup`. The name of the administrative group.
+
+##### `enable_password`
+
+Default: `enablepassword`. Sets the enable password.
+
+##### `logfile`
+
+Default: `/var/log/tacacs/tac_plus.log`. Specifies the file which TACACS+ will 
+log to.
 
 ## Reference
 
-Here, list the classes, types, providers, facts, etc contained in your module.
-This section should include all of the under-the-hood workings of your module so
-people know what the module is touching on their system but don't need to mess
-with things. (We are working on automating this section!)
+Once the package is installed, please see the following:
+ * ````man tac_plus````
+ * ````man tac_pwd````
+ * ````man tac_plus.conf````
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc.
+This module is currently only compatible with RedHat 7.x.
+
+Built in support for SIMP is included by setting ````tacacsplus::simp = true````
+in Hiera.
 
 ## Development
+This module was written primarily for internal use - features we haven't needed 
+to use probably haven't been written. Please send pull requests with new 
+features and bug fixes. You are also welcome to file issues but I make no
+guarantees of development effort if the features aren't useful to my employer.
 
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
+### Items on the TODO list
+* The user and group blocks in the configuration file should be built using user
+and group defined types, allowing for an arbitrary number of users and groups.
+* It should be possible to put a user into an arbitrary number of groups.
+* This configuration file assumes a single admin group. This needs to be made to
+be more flexible.
+* Currently the module only supports variables being set from Hiera. This is 
+because the author clearly doesn't understand the params pattern.
+* The systemd configuration should be updated to include restart and status 
+directives.
+* The systemd configuration should be rolled into the RPM.
 
-## Release Notes/Contributors/Etc **Optional**
-
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You may also add any additional sections you feel are
-necessary or important to include here. Please use the `## ` header.
