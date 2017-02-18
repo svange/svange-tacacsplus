@@ -45,5 +45,6 @@ class tacacsplus::params {
   $tacacs_admin_group = 'admingroup'
   $tacacs_enable_password = 'enable'
   $tacacs_logfile = '/var/log/tacacs/tac_plus.log'
+  $tacacs_encoding = "cleartext"
   $simp = false
 }

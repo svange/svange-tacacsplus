@@ -6,6 +6,17 @@
 #
 # Samuel Vange <samuelvange@gmail.com>
 #
+# === Example
+#
+# # .../hieradata/hosts/tacacs-server.yaml
+# tacacsplus::key : 'password'
+# tacacsplus::login_user : 'user'
+# tacacsplus::login_user_password : 'longpassword'
+# tacacsplus::enable_password : 'enable'
+# tacacsplus::encoding : 'md5'
+# classes:
+#   - 'tacacsplus
+#
 # === Copyright
 #
 # Copyright 2016 Samuel Vange, unless otherwise noted.
