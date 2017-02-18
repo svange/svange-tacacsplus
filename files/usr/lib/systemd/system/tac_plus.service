@@ -1,0 +1,9 @@
+[Unit]
+Description=Tacacs+ server
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/tac_plus -C /etc/tacacs/tac_plus.conf -d 256
+ExecStop=/bin/pkill tac_plus
+

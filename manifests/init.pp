@@ -11,7 +11,9 @@
 # Copyright 2016 Samuel Vange, unless otherwise noted.
 #
 class tacacsplus {
-  include tacacsplus::install
-  include tacacsplus::config
-  include tacacsplus::service
+  class {tacacsplus::install:}
+  class {tacacsplus::config:}
+  class {tacacsplus::service:}
+
+  Class[tacacsplus::install] -> Class[tacacsplus::config] -> Class[tacacsplus::service]
 }

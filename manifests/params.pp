@@ -38,7 +38,7 @@
 # Copyright 2016 Samuel Vange, unless otherwise noted.
 #
 class tacacsplus::params {
-  $package_name = 'tacacsplus-1.0-1.el7.x86_64.rpm'
+  $package_name = 'tacacsplus'
   $tacacs_key = 'tackey'
   $tacacs_login_user = 'admin'
   $tacacs_login_user_password = 'password'

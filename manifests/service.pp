@@ -11,6 +11,7 @@
 # Copyright 2016 Samuel Vange, unless otherwise noted.
 #
 class tacacsplus::service {
+  include tacacsplus::params
   service {'tac_plus':
     ensure  =>  running,
     enable  =>  true,
