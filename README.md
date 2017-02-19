@@ -45,14 +45,30 @@ not available as an RPM, files/tacacsplus-1.0-1.el7.x86_64 is provided.
 
 #### In Hiera:
 ````
-tacacsplus::key :                   'tackey'
-tacacsplus::login_user :            'user'
-tacacsplus::login_user_password :   'mypassword'
-tacacsplus::enable_password :       'myenablepassword'
-tacacsplus::encoding :              'des'
-
+# .../hieradata/hosts/tacacs-server.yaml
+tacacsplus::key : 'password'
+tacacsplus::login_user : 'user'
+tacacsplus::login_user_password : 'longpassword'
+tacacsplus::enable_password : 'enable'
+tacacsplus::encoding : 'md5'
 classes:
-  - 'tacacsplus'
+  - 'tacacsplus
+````
+
+#### In Puppet:
+````
+#.../manifests/puppetcode.pp
+class { 'tacacsplus': 
+    package_name          => 'mytacacsplus',
+    key                   => 'tackey',
+    login_user            => 'myuser',
+    login_user_password   => 'myuserpassword',
+    admin_group           => 'myadmingroup',
+    enable_password       => 'myenablepassword',
+    logfile               => '/my/log/file',
+    encoding              => 'sha',
+    simp                  => true, 
+}
 ````
 
 ## Usage
@@ -64,7 +80,7 @@ configuration file. Options are 'file', 'cleartext', 'nopassword', or 'des'.
 
 ##### `key`
 
-Default: `tackey`. Specifies the symetric key used for communication with 
+Default: `tackey`. Specifies the symmetric key used for communication with 
 clients.
 
 ##### `login_user`

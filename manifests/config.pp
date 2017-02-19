@@ -2,6 +2,10 @@
 #
 # This class handles configuring TACACS+ on the target machine.
 #
+# === Variables
+#
+# See init.pp
+#
 # === Authors
 #
 # Samuel Vange <samuelvange@gmail.com>
@@ -13,31 +17,19 @@
 # Copyright 2016 Samuel Vange, unless otherwise noted.
 #
 class tacacsplus::config {
-  include tacacsplus::params
-  $package_name = hiera('tacacsplus::package_name', $::tacacsplus::config::package_name )
-  $tacacs_key = hiera('tacacsplus::key', $::tacacsplus::params::tacacs_key)
-  $tacacs_login_user = hiera('tacacsplus_login_user', $::tacacsplus::params::tacacs_login_user)
-  $tacacs_login_user_password = hiera('tacacsplus::user_password', $::tacacsplus::params::tacacs_login_user_password)
-  $tacacs_admin_group = hiera('tacacsplus::admin_group', $::tacacsplus::params::tacacs_admin_group)
-  $tacacs_enable_password = hiera('tacacsplus::enable_password', $::tacacsplus::params::tacacs_enable_password)
-  $tacacs_logfile = hiera('tacacsplus::logfile', $::tacacsplus::params::tacacs_logfile)
-  $tacacs_encoding = hiera('tacacsplus::encoding', $::tacacsplus::params::tacacs_encoding)
-  $simp = hiera('tacacsplus::simp', $::tacacsplus::params::simp)
+  # These variables are used in the config file template.
+  $package_name = $tacacsplus::package_name
+  $tacacs_key = $tacacsplus::key
+  $tacacs_login_user = $tacacsplus::login_user
+  $tacacs_login_user_password = $tacacsplus::login_user_password
+  $tacacs_admin_group = $tacacsplus::admin_group
+  $tacacs_enable_password = $tacacsplus::enable_password
+  $tacacs_logfile = $tacacsplus::logfile
+  $tacacs_encoding = $tacacsplus::encoding
 
-  validate_string($package_name)
-  validate_string($tacacs_key)
-  validate_string($tacacs_login_user)
-  validate_string($tacacs_login_user_password)
-  validate_string($tacacs_admin_group)
-  validate_string($tacacs_enable_password)
-  validate_string($tacacs_logfile)
-  validate_string($tacacs_encoding)
-  validate_bool($simp)
-
-  if ($simp){
-    $_client_nets = hiera('client_nets',['ALL'])
+  if ($tacacsplus::simp){
     iptables::add_tcp_stateful_listen { 'tacacsplus_iptables':
-      client_nets         =>  $_client_nets,
+      client_nets         =>  hiera('client_nets',['ALL']),
       dports              =>  ['49'],
     }
   }
@@ -47,8 +39,8 @@ class tacacsplus::config {
     owner                 =>  'root',
     group                 =>  'root',
     mode                  =>  '0600',
-    content               => template('tacacsplus/tac_plus.conf.erb'),
-    notify                => Service['tac_plus'],
+    content               =>  template('tacacsplus/tac_plus.conf.erb'),
+    notify                =>  Service['tac_plus'],
     provider              =>  posix,
   }
 
