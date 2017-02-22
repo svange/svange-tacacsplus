@@ -3,7 +3,15 @@ Description=Tacacs+ server
 After=network-online.target
 
 [Service]
-Type=simple
-ExecStart=/usr/local/bin/tac_plus -C /etc/tacacs/tac_plus.conf -d 256
-ExecStop=/bin/pkill tac_plus
+Type=forking
+PIDFile=/etc/tacacs/tac_plus.pid
+ExecReload=/bin/kill -HUP $(cat /etc/tacacs/tac_plus.pid)
+ExecStart=/usr/local/bin/tac_plus -C /etc/tacacs/tac_plus.conf -d 256 & echo $! > /etc/tacacs/tac_plus.pid
+ExecStop=/bin/kill $(cat /etc/tacacs/tac_plus.pid)
+ExecRestart=/bin/kill $(cat /etc/tacacs/tac_plus.pid) && /usr/local/bin/tac_plus -C /etc/tacacs/tac_plus.conf -d 256 & echo $! > /etc/tacacs/tac_plus.pid
+
+[Install]
+WantedBy=network-online.target
+
+
 
